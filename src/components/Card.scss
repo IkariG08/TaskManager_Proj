@@ -1,0 +1,52 @@
+.Card-root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    min-height: 500px;
+    background-color: #d6eaff;
+    border-radius: 8px;
+    padding: 20px;
+  }
+  
+  .Card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .column-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+  }
+  
+  .Drop-zone {
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+    border: 2px dashed #007acc;
+  }
+  
+  .Draggable-root {
+    background-color: white;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+    cursor: grab;
+    margin-bottom: 10px;
+    transition: background-color 0.2s;
+  }
+  
+  .Draggable-root.dragging {
+    background-color: #007acc !important;
+    color: white;
+  }
+  
+  .task-title {
+    margin-bottom: 8px; /* Añade espacio entre el título y la descripción */
+  }
+  
+  .task-desc {
+    margin-top: 8px; /* Elimina margen superior */
+  }

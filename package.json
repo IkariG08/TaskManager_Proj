@@ -1,0 +1,32 @@
+{
+  "name": "materials",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.1",
+    "@mui/material": "^6.1.1",
+    "date-fns": "^4.1.0",
+    "next": "14.2.13",
+    "react": "^18",
+    "react-beautiful-dnd": "^11.0.2",
+    "react-dom": "^18",
+    "sass": "^1.79.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-beautiful-dnd": "^13.1.8",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.13",
+    "typescript": "^5"
+  }
+}
