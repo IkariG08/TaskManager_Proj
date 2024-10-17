@@ -4,7 +4,7 @@
     align-items: center;
     width: 300px;
     min-height: 500px;
-    background-color: #d6eaff;
+    background-color: var(--task-column-bg);
     border-radius: 8px;
     padding: 20px;
   }
@@ -25,11 +25,11 @@
     height: 100%;
     width: 100%;
     padding: 10px;
-    border: 2px dashed #007acc;
+    border: 2px dashed var(--card-active);
   }
   
   .Draggable-root {
-    background-color: white;
+    background-color: var(--background);
     padding: 16px;
     border-radius: 8px;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
@@ -39,7 +39,7 @@
   }
   
   .Draggable-root.dragging {
-    background-color: #007acc !important;
+    background-color: var(--card-active) !important;
     color: white;
   }
   

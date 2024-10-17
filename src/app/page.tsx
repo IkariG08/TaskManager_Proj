@@ -1,7 +1,7 @@
 "use client";
 import "./page.scss";
 import Card from "@/components/Card";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { format, addDays, startOfWeek } from "date-fns";
 
@@ -18,6 +18,46 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskDesc, setNewTaskDesc] = useState("");
+
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  // Función para cambiar el tema
+  const changeTheme = (newTheme: typeof theme) => {
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
+
+  // Escuchar eventos de teclado globalmente
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Digit1") {
+        changeTheme("light");
+        console.log("light theme");
+      } else if (event.code === "Digit2") {
+        changeTheme("dark");
+        console.log("dark theme");
+      }
+    };
+
+    // Añadir el listener al cargar el componente
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Remover el listener al desmontar el componente
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  // Cargar el tema almacenado al montar el componente
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme as typeof theme);
+  }, []);
+
+  // Aplicar el tema al HTML cuando cambia
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
 
   const handleDragEnd = (result: DropResult) => {
     const { source, destination } = result;

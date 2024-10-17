@@ -1,13 +1,23 @@
 :root {
-  --background: #ffffff;
+  --background: #f0f8ff;
   --foreground: #171717;
+
+  --card-active: #007acc;
+  --card-inactive: #e0e7ff;
+  --button-hover: #005f99;
+
+  --task-column-bg: #d6eaff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Tema oscuro */
+[data-theme="dark"] {
+  --background: #282a36;
+  --foreground: #f8f8f2;
+
+  --card-active: #3c6e71;
+  --card-inactive: #5c5f66;
+  --button-hover: #28494b;
+  --task-column-bg: #44475a;
 }
 
 html,
@@ -35,8 +45,15 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+html, body {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+.page-root {
+  transition: background-color 0.3s ease;
+}
+
+.carousel-day, .add-task-button, .modal-content, .columns {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
