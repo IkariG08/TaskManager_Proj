@@ -25,6 +25,27 @@
   margin-left: 75px;
 }
 
+.btns-prev-next{
+  display: flex;
+  width: 100%;
+  justify-content: end;
+  padding: 0 4rem;
+}
+
+.prev-next{
+  width: 150px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: var(--card-inactive);
+  color: var(--foreground);
+  margin-right: 1rem;
+  transition: 0.3s;
+}
+.prev-next:hover{
+  background-color: var(--card-hover);
+  cursor: pointer;
+}
+
 .carousel {
   display: flex;
   justify-content: center;

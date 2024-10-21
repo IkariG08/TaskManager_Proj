@@ -6,11 +6,35 @@ import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { format, addDays, startOfWeek } from "date-fns";
 
 export default function Home() {
-  const startDate = startOfWeek(new Date(), { weekStartsOn: 1 });
-  const daysOfWeek = Array.from({ length: 7 }, (_, index) =>
-    format(addDays(startDate, index), "EEEE, MMM d")
-  );
-  const today = format(new Date(), "EEEE, MMM d");
+  const [startDate, setStartDate] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [daysOfWeek, setDaysOfWeek] = useState(['']);
+  const [daySelected, setDaySelected] = useState('');
+  
+  useEffect(() => {
+    const days = Array.from({ length: 7 }, (_, index) =>
+      format(addDays(startDate, index), "EEEE, MMM d")
+    );
+    setDaysOfWeek(days);
+
+    // Set daySelected to the first day of the week or maintain the current selection
+    if (!daySelected) {
+      setDaySelected(days[0]); // Initially set to the first day of the week
+    }
+  }, [startDate]);
+
+  //funcnión para la configuración de los botones de siguiente o anterior semana 
+  const changeStartDate = (isNext: boolean) => {
+    //console.log(daySelected);
+    if (isNext)
+      setStartDate(prevDate => addDays(prevDate, 7));
+    else
+      setStartDate(prevDate => addDays(prevDate, -7));
+    //console.log(daySelected);
+  };
+
+  const changeSelected = (numW: 4)=>{
+    setDaySelected(daysOfWeek[numW]);
+  }
 
   const [todoItems, setTodoItems] = useState([]);
   const [doingItems, setDoingItems] = useState([]);
@@ -92,7 +116,7 @@ export default function Home() {
   };
 
   const handleAddTask = () => {
-    setTodoItems([...todoItems, { id: `${todoItems.length}`, content: { title: newTaskTitle, description: newTaskDesc } }]);
+    setTodoItems([...todoItems, { id: `${todoItems.length}`, content: { title: newTaskTitle, description: newTaskDesc, date: daySelected } }]);
     setNewTaskTitle("");
     setNewTaskDesc("");
     setShowModal(false);
@@ -102,21 +126,26 @@ export default function Home() {
     <div className="page-root">
       {/* Título del día y carrusel */}
       <div className="header">
-        <h1 className="today">{today}</h1>
+        <h1 className="today">{daySelected}</h1>
+        <div className="btns-prev-next">
+          <div className="prev-next" onClick={() => changeStartDate(false)} />
+          <div className="prev-next" onClick={() => changeStartDate(true)} />
+        </div>
         <div className="carousel">
           {daysOfWeek.map((day, index) => (
-            <div key={index} className={`carousel-day ${day === today ? "active" : ""}`}>
+            <div key={index} className={`carousel-day ${day === daySelected ? "active" : ""}`} onClick={() => changeSelected(index)}>
               {day}
             </div>
           ))}
         </div>
+
       </div>
 
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="columns">
-          <Card id="todo" title="To Do" items={todoItems} />
-          <Card id="doing" title="Doing" items={doingItems} />
-          <Card id="done" title="Done" items={doneItems} />
+          <Card id="todo" title="To Do" date={daySelected} items={todoItems} />
+          <Card id="doing" title="Doing" date={daySelected}  items={doingItems} />
+          <Card id="done" title="Done" date={daySelected}  items={doneItems} />
         </div>
       </DragDropContext>
 
