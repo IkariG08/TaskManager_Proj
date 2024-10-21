@@ -51,7 +51,7 @@ export default function Home() {
     localStorage.setItem("theme", newTheme);
   };
 
-  // Escuchar eventos de teclado globalmente
+  /*// Escuchar eventos de teclado globalmente
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Digit1") {
@@ -71,6 +71,12 @@ export default function Home() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+  */
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    changeTheme(newTheme);
+  };
 
   // Cargar el tema almacenado al montar el componente
   useEffect(() => {
@@ -116,11 +122,38 @@ export default function Home() {
   };
 
   const handleAddTask = () => {
+    if (newTaskTitle.trim() === "" || newTaskDesc.trim() === "") {
+      // Evita agregar una tarea vacía
+      return;
+    }
+
     setTodoItems([...todoItems, { id: `${todoItems.length}`, content: { title: newTaskTitle, description: newTaskDesc, date: daySelected } }]);
     setNewTaskTitle("");
     setNewTaskDesc("");
     setShowModal(false);
-  };
+};
+
+
+const handleKeyPress = (event: React.KeyboardEvent) => {
+  if (event.key === "Enter") {
+      event.preventDefault();  // Evita que se envíe el formulario de manera predeterminada
+      handleAddTask();
+  } else if (event.key === "Escape") {
+      setShowModal(false);
+  }
+};
+
+  useEffect(() => {
+    if (showModal) {
+      window.addEventListener("keydown", handleKeyPress);
+    } else {
+      window.removeEventListener("keydown", handleKeyPress);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [showModal]);
 
   return (
     <div className="page-root">
@@ -128,8 +161,12 @@ export default function Home() {
       <div className="header">
         <h1 className="today">{daySelected}</h1>
         <div className="btns-prev-next">
-          <div className="prev-next" onClick={() => changeStartDate(false)} />
-          <div className="prev-next" onClick={() => changeStartDate(true)} />
+          <div className="prev-next" onClick={() => changeStartDate(false)}>
+            <h3>Previous Week</h3>
+          </div>
+          <div className="prev-next" onClick={() => changeStartDate(true)}>
+            <h3>Next Week</h3>
+          </div>
         </div>
         <div className="carousel">
           {daysOfWeek.map((day, index) => (
@@ -150,7 +187,16 @@ export default function Home() {
       </DragDropContext>
 
       {/* Botón para añadir una task */}
-      <button className="add-task-button" onClick={() => setShowModal(true)}>Add task</button>
+      <button
+        className="add-task-button"
+        onClick={() => {
+          setNewTaskTitle("");  // Restablece el valor del título
+          setNewTaskDesc("");   // Restablece el valor de la descripción
+          setShowModal(true);   // Muestra el modal
+        }}
+      >
+        Add task
+      </button>
 
       {/* Modal para agregar nueva task */}
       {showModal && (
@@ -162,17 +208,24 @@ export default function Home() {
               placeholder="Task title"
               value={newTaskTitle}
               onChange={(e) => setNewTaskTitle(e.target.value)}
+              onKeyDown={handleKeyPress}
             />
             <textarea
               placeholder="Task description"
               value={newTaskDesc}
               onChange={(e) => setNewTaskDesc(e.target.value)}
+              onKeyDown={handleKeyPress}
             />
             <button onClick={handleAddTask}>Add</button>
             <button onClick={() => setShowModal(false)}>Cancel</button>
           </div>
         </div>
       )}
+
+      {/* Botón para cambiar el tema */}
+      <button className="toggle-theme-button" onClick={toggleTheme}>
+      <img src="images/brightness.png" alt="Toggle dark mode" />
+      </button>
     </div>
   );
 }
