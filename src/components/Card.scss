@@ -30,6 +30,7 @@
   
   .Draggable-root {
     background-color: var(--background);
+    position: relative;
     padding: 16px;
     border-radius: 8px;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
@@ -53,4 +54,15 @@
     margin-top: 8px; /* Elimina margen superior */
     white-space: pre-wrap;  /* Mantiene los saltos de línea y espacios */
     word-wrap: break-word;  /* Permite que las palabras largas se ajusten dentro del contenedor */
+  }
+
+  .del-task{
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+  .edi-task{
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
   }

@@ -1,18 +1,30 @@
 import { Box, Typography } from "@mui/material";
 import "./Card.scss";
+import React, { useState , useEffect } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
-import { format, addDays, startOfWeek } from "date-fns";
 
 interface IDropsProps {
   id: string;
   title: string;
   date: string;
-  items: { id: string, content: { title: string, description: string, date: string, } }[];
+  items: { id: string, content: { title: string, description: string, date: string, vis: boolean } }[];
 }
 
 export default function Card(props: IDropsProps) {
-  const { items, id, title } = props;
-  const today = format(new Date(), "EEEE, MMM d");
+  const { id, title, items: initialItems } = props;
+  const [items, setItems] = useState(initialItems); 
+
+  useEffect(() => {
+    setItems(initialItems);
+  }, [initialItems]);
+
+  const handleDelete = (itemId: string) => {
+    setItems((prevItems) =>
+      prevItems.map(item => 
+        item.id === itemId ? { ...item, content: { ...item.content, vis: false } } : item
+      )
+    );
+  };
 
   return (
     <Box className="Card-root">
@@ -28,7 +40,7 @@ export default function Card(props: IDropsProps) {
               const isVisi= item.content.date===props.date;
                 
               return (
-                isVisi && (
+                isVisi && item.content.vis && (
                 <Draggable draggableId={item.id} key={item.id} index={index}>
                   {(provided, snapshot) => (
                     <div
@@ -40,6 +52,8 @@ export default function Card(props: IDropsProps) {
                     >
                       <strong className="task-title">{item.content.title}</strong>
                       <p className="task-desc">{item.content.description}</p>
+                      <div className="del-task" onClick={() => handleDelete(item.id)}>0</div>
+                      <div className="edi-task">8</div>
                     </div>
                   )}
                 </Draggable>

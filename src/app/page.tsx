@@ -127,7 +127,7 @@ export default function Home() {
       return;
     }
 
-    setTodoItems([...todoItems, { id: `${todoItems.length}`, content: { title: newTaskTitle, description: newTaskDesc, date: daySelected } }]);
+    setTodoItems([...todoItems, { id: `${todoItems.length}`, content: { title: newTaskTitle, description: newTaskDesc, date: daySelected, vis: true } }]);
     setNewTaskTitle("");
     setNewTaskDesc("");
     setShowModal(false);
