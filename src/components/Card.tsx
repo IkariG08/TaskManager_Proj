@@ -18,13 +18,22 @@ export default function Card(props: IDropsProps) {
     setItems(initialItems);
   }, [initialItems]);
 
-  const handleDelete = (itemId: string) => {
-    setItems((prevItems) =>
-      prevItems.map(item => 
-        item.id === itemId ? { ...item, content: { ...item.content, vis: false } } : item
-      )
-    );
-  };
+  function handleDelete(id: string) {
+    if (window.removeItem) {
+      window.removeItem(id);
+    } else {
+      console.error("error al encontrar remove");
+    }
+  }
+
+  function handleEdit(id: string) {
+    if (window.editItem) {
+      console.log('por favor');
+      window.editItem(id);
+    } else {
+      console.log("error al encontrar edit");
+    }
+  }
 
   return (
     <Box className="Card-root">
@@ -53,7 +62,7 @@ export default function Card(props: IDropsProps) {
                       <strong className="task-title">{item.content.title}</strong>
                       <p className="task-desc">{item.content.description}</p>
                       <div className="del-task" onClick={() => handleDelete(item.id)}>0</div>
-                      <div className="edi-task">8</div>
+                      <div className="edi-task" onClick={() => handleEdit(item.id)}>8</div>
                     </div>
                   )}
                 </Draggable>

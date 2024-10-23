@@ -16,9 +16,8 @@ export default function Home() {
     );
     setDaysOfWeek(days);
 
-    // Set daySelected to the first day of the week or maintain the current selection
     if (!daySelected) {
-      setDaySelected(days[0]); // Initially set to the first day of the week
+      setDaySelected(days[0]); 
     }
   }, [startDate]);
 
@@ -42,6 +41,13 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskDesc, setNewTaskDesc] = useState("");
+
+  //variable para saber si se dio click en editar y abrir un diferente modal
+  const [editTask, setEditTask] = useState(false);
+  const [editRules, setEditRules] = useState({
+    id: 0,
+    categ: "Hello, World!"
+  });
 
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
@@ -126,11 +132,44 @@ export default function Home() {
       // Evita agregar una tarea vacía
       return;
     }
-
     setTodoItems([...todoItems, { id: `${todoItems.length}`, content: { title: newTaskTitle, description: newTaskDesc, date: daySelected, vis: true } }]);
     setNewTaskTitle("");
     setNewTaskDesc("");
     setShowModal(false);
+};
+
+const removeItem = (id: 1) => {
+  setTodoItems(prevItems => prevItems.filter(item => item.id !== id));
+  setDoingItems(prevItems => prevItems.filter(item => item.id !== id));
+  setDoneItems(prevItems => prevItems.filter(item => item.id !== id));
+};
+window.removeItem = removeItem;
+
+const editItem = (id: number) => {
+  const itemToEdit = todoItems.find(item => item.id === id);
+  if (itemToEdit) {
+    setNewTaskTitle(itemToEdit.content.title);
+    setNewTaskDesc(itemToEdit.content.description); 
+    setEditTask(true);
+    setEditRules({ id: id, categ: 'todo' });
+    console.log('primero');
+    setShowModal(true);
+  }
+};
+window.editItem = editItem;
+
+const handleEditTask = (datos) => {
+  if (newTaskTitle.trim() === "" || newTaskDesc.trim() === "") {
+    // Evita agregar una tarea vacía
+    return;
+  }
+  console.log('ultimo?');
+  todoItems[datos.id].content.title= newTaskTitle;
+  todoItems[datos.id].content.description= newTaskDesc;
+  setNewTaskTitle("");
+  setNewTaskDesc("");
+  setEditTask(false);
+  setShowModal(false);
 };
 
 
@@ -193,6 +232,7 @@ const handleKeyPress = (event: React.KeyboardEvent) => {
           setNewTaskTitle("");  // Restablece el valor del título
           setNewTaskDesc("");   // Restablece el valor de la descripción
           setShowModal(true);   // Muestra el modal
+          setEditTask(false);
         }}
       >
         Add task
@@ -206,7 +246,7 @@ const handleKeyPress = (event: React.KeyboardEvent) => {
             <input
               type="text"
               placeholder="Task title"
-              value={newTaskTitle}
+              value={newTaskTitle/*todoItems[0].content.title*/}
               onChange={(e) => setNewTaskTitle(e.target.value)}
               onKeyDown={handleKeyPress}
             />
@@ -216,8 +256,8 @@ const handleKeyPress = (event: React.KeyboardEvent) => {
               onChange={(e) => setNewTaskDesc(e.target.value)}
               onKeyDown={handleKeyPress}
             />
-            <button onClick={handleAddTask}>Add</button>
-            <button onClick={() => setShowModal(false)}>Cancel</button>
+            <button onClick={() => (editTask ? handleEditTask(editRules) : handleAddTask())}>Add</button>
+            <button onClick={() => (setShowModal(false))}>Cancel</button>
           </div>
         </div>
       )}
@@ -229,3 +269,4 @@ const handleKeyPress = (event: React.KeyboardEvent) => {
     </div>
   );
 }
+//handleEditTask(editRules) : handleAddTask()
