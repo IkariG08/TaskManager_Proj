@@ -46,7 +46,7 @@ export default function Home() {
   const [editTask, setEditTask] = useState(false);
   const [editRules, setEditRules] = useState({
     id: 0,
-    categ: "Hello, World!"
+    categ: "yo"
   });
 
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -145,14 +145,28 @@ const removeItem = (id: 1) => {
 };
 window.removeItem = removeItem;
 
-const editItem = (id: number) => {
-  const itemToEdit = todoItems.find(item => item.id === id);
-  if (itemToEdit) {
+const editItem = (id: number, area: string) => {
+  console.log(id);
+  if (area==='To Do') {
+    const itemToEdit = todoItems[id];
     setNewTaskTitle(itemToEdit.content.title);
     setNewTaskDesc(itemToEdit.content.description); 
     setEditTask(true);
     setEditRules({ id: id, categ: 'todo' });
-    console.log('primero');
+    setShowModal(true);
+  }else if(area==='Doing'){
+    const doingToEdit = doingItems[id];
+    setNewTaskTitle(doingToEdit.content.title);
+    setNewTaskDesc(doingToEdit.content.description); 
+    setEditTask(true);
+    setEditRules({ id: id, categ: 'doing' });
+    setShowModal(true);
+  }else if(area==='Done'){
+    const doneToEdit = doneItems[id];
+    setNewTaskTitle(doneToEdit.content.title);
+    setNewTaskDesc(doneToEdit.content.description); 
+    setEditTask(true);
+    setEditRules({ id: id, categ: 'done' });
     setShowModal(true);
   }
 };
@@ -163,20 +177,35 @@ const handleEditTask = (datos) => {
     // Evita agregar una tarea vacía
     return;
   }
-  console.log('ultimo?');
-  todoItems[datos.id].content.title= newTaskTitle;
-  todoItems[datos.id].content.description= newTaskDesc;
-  setNewTaskTitle("");
-  setNewTaskDesc("");
-  setEditTask(false);
-  setShowModal(false);
+  if(datos.categ==='todo'){
+    todoItems[datos.id].content.title= newTaskTitle;
+    todoItems[datos.id].content.description= newTaskDesc;
+    setNewTaskTitle("");
+    setNewTaskDesc("");
+    setEditTask(false);
+    setShowModal(false);
+  }else if(datos.categ==='doing'){
+    doingItems[datos.id].content.title= newTaskTitle;
+    doingItems[datos.id].content.description= newTaskDesc;
+    setNewTaskTitle("");
+    setNewTaskDesc("");
+    setEditTask(false);
+    setShowModal(false);
+  }else if(datos.categ==='done'){
+    doneItems[datos.id].content.title= newTaskTitle;
+    doneItems[datos.id].content.description= newTaskDesc;
+    setNewTaskTitle("");
+    setNewTaskDesc("");
+    setEditTask(false);
+    setShowModal(false);
+  }
 };
 
 
 const handleKeyPress = (event: React.KeyboardEvent) => {
   if (event.key === "Enter") {
       event.preventDefault();  // Evita que se envíe el formulario de manera predeterminada
-      handleAddTask();
+      editTask ? handleEditTask(editRules) : handleAddTask()
   } else if (event.key === "Escape") {
       setShowModal(false);
   }

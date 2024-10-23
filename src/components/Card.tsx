@@ -14,6 +14,7 @@ export default function Card(props: IDropsProps) {
   const { id, title, items: initialItems } = props;
   const [items, setItems] = useState(initialItems); 
 
+
   useEffect(() => {
     setItems(initialItems);
   }, [initialItems]);
@@ -26,10 +27,10 @@ export default function Card(props: IDropsProps) {
     }
   }
 
-  function handleEdit(id: string) {
+  function handleEdit(id: number, area: string) {
     if (window.editItem) {
       console.log('por favor');
-      window.editItem(id);
+      window.editItem(id, area);
     } else {
       console.log("error al encontrar edit");
     }
@@ -62,7 +63,7 @@ export default function Card(props: IDropsProps) {
                       <strong className="task-title">{item.content.title}</strong>
                       <p className="task-desc">{item.content.description}</p>
                       <div className="del-task" onClick={() => handleDelete(item.id)}>0</div>
-                      <div className="edi-task" onClick={() => handleEdit(item.id)}>8</div>
+                      <div className="edi-task" onClick={() => handleEdit(index, title)}>8</div>
                     </div>
                   )}
                 </Draggable>
