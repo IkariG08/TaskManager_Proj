@@ -36,6 +36,7 @@ export default function Card(props: IDropsProps) {
     }
   }
 
+  //Código visto en clase para hacer funcionar el Drag N Drop
   return (
     <Box className="Card-root">
       <Typography className="column-title">{title}</Typography>

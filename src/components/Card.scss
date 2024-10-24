@@ -45,15 +45,15 @@
   }
   
   .task-title {
-    margin-bottom: 8px; /* Añade espacio entre el título y la descripción */
-    white-space: pre-wrap;  /* Mantiene los saltos de línea y espacios */
-    word-wrap: break-word;  /* Permite que las palabras largas se ajusten dentro del contenedor */
+    margin-bottom: 8px;
+    white-space: pre-wrap;
+    word-wrap: break-word; 
   }
   
   .task-desc {
-    margin-top: 8px; /* Elimina margen superior */
-    white-space: pre-wrap;  /* Mantiene los saltos de línea y espacios */
-    word-wrap: break-word;  /* Permite que las palabras largas se ajusten dentro del contenedor */
+    margin-top: 8px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
   }
 
   .del-task{
