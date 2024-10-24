@@ -1,19 +1,20 @@
 import { Box, Typography } from "@mui/material";
 import "./Card.scss";
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface IDropsProps {
   id: string;
   title: string;
   date: string;
-  items: { id: string, content: { title: string, description: string, date: string, vis: boolean } }[];
+  items: { id: string, content: { title: string, description: string, date: string, vis: boolean, priority: boolean } }[];
 }
 
 export default function Card(props: IDropsProps) {
   const { id, title, items: initialItems } = props;
-  const [items, setItems] = useState(initialItems); 
-
+  const [items, setItems] = useState(initialItems);
 
   useEffect(() => {
     setItems(initialItems);
@@ -29,14 +30,21 @@ export default function Card(props: IDropsProps) {
 
   function handleEdit(id: number, area: string) {
     if (window.editItem) {
-      console.log('por favor');
       window.editItem(id, area);
     } else {
       console.log("error al encontrar edit");
     }
   }
 
-  //Código visto en clase para hacer funcionar el Drag N Drop
+  function handlePriority(itemId: string, area: string) {
+    if (window.handleSetPriority) {
+      console.log('entró');
+      window.handleSetPriority(itemId, area);
+    } else {
+      console.log("error al encontrar priority");
+    }
+  }
+
   return (
     <Box className="Card-root">
       <Typography className="column-title">{title}</Typography>
@@ -48,26 +56,32 @@ export default function Card(props: IDropsProps) {
             ref={provided.innerRef}
           >
             {items.map((item, index) => {
-              const isVisi= item.content.date===props.date;
-                
+              const isVisi = item.content.date === props.date;
+
               return (
                 isVisi && item.content.vis && (
-                <Draggable draggableId={item.id} key={item.id} index={index}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      className={`Draggable-root ${snapshot.isDragging ? "dragging" : ""}`
-                      }
-                    >
-                      <strong className="task-title">{item.content.title}</strong>
-                      <p className="task-desc">{item.content.description}</p>
-                      <div className="del-task" onClick={() => handleDelete(item.id)}>0</div>
-                      <div className="edi-task" onClick={() => handleEdit(index, title)}>8</div>
-                    </div>
-                  )}
-                </Draggable>
+                  <Draggable draggableId={item.id} key={item.id} index={index}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className={`Draggable-root ${snapshot.isDragging ? "dragging" : ""}`}
+                      >
+                        <strong className="task-title">{item.content.title}</strong>
+                        <p className="task-desc">{item.content.description}</p>
+                        <div className="del-task" onClick={() => handleDelete(item.id)}>
+                          <DeleteIcon className="icone" fontSize="small" />
+                        </div>
+                        <div className="edi-task" onClick={() => handleEdit(index, title)}>
+                          <EditIcon className="icone" fontSize="small" />
+                        </div>
+                        <div className="priorita" onClick={() => handlePriority(item.id, title)}>
+                          <div className={`priorita-menor ${item.content.priority ? "active" : ''}`} />
+                        </div>
+                      </div>
+                    )}
+                  </Draggable>
                 )
               );
             })}

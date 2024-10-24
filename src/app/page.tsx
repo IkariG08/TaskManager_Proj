@@ -123,13 +123,11 @@ export default function Home() {
       // Evitar agregar una tarea vacía
       return;
     }
-    setTodoItems([...todoItems, { id: `${todoItems.length}`, content: { title: newTaskTitle, description: newTaskDesc, date: daySelected, vis: true } }]);
+    setTodoItems([...todoItems, { id: `${todoItems.length}`, content: { title: newTaskTitle, description: newTaskDesc, date: daySelected, vis: true, priority: false } }]);
     setNewTaskTitle(""); //Empezar siempre sin nada
     setNewTaskDesc("");
     setShowModal(false); //Quitar el pop up
 };
-
-
 
 //Función para quitar una task
 const removeItem = (id: 1) => {
@@ -140,7 +138,6 @@ const removeItem = (id: 1) => {
 window.removeItem = removeItem;
 
 
-
 //Función para editar la task seleccionada
 const editItem = (id: number, area: string) => {
   console.log(id);
@@ -148,24 +145,20 @@ const editItem = (id: number, area: string) => {
     const itemToEdit = todoItems[id];
     setNewTaskTitle(itemToEdit.content.title);
     setNewTaskDesc(itemToEdit.content.description); 
-    setEditTask(true);
     setEditRules({ id: id, categ: 'todo' });
-    setShowModal(true);
   }else if(area==='Doing'){
     const doingToEdit = doingItems[id];
     setNewTaskTitle(doingToEdit.content.title);
     setNewTaskDesc(doingToEdit.content.description); 
-    setEditTask(true);
     setEditRules({ id: id, categ: 'doing' });
-    setShowModal(true);
   }else if(area==='Done'){
     const doneToEdit = doneItems[id];
     setNewTaskTitle(doneToEdit.content.title);
     setNewTaskDesc(doneToEdit.content.description); 
-    setEditTask(true);
     setEditRules({ id: id, categ: 'done' });
-    setShowModal(true);
   }
+  setEditTask(true);
+  setShowModal(true);
 };
 window.editItem = editItem;
 
@@ -180,25 +173,18 @@ const handleEditTask = (datos) => {
   if(datos.categ==='todo'){
     todoItems[datos.id].content.title= newTaskTitle;
     todoItems[datos.id].content.description= newTaskDesc;
-    setNewTaskTitle("");
-    setNewTaskDesc("");
-    setEditTask(false);
-    setShowModal(false);
+    
   }else if(datos.categ==='doing'){
     doingItems[datos.id].content.title= newTaskTitle;
     doingItems[datos.id].content.description= newTaskDesc;
-    setNewTaskTitle("");
-    setNewTaskDesc("");
-    setEditTask(false);
-    setShowModal(false);
   }else if(datos.categ==='done'){
     doneItems[datos.id].content.title= newTaskTitle;
     doneItems[datos.id].content.description= newTaskDesc;
-    setNewTaskTitle("");
-    setNewTaskDesc("");
-    setEditTask(false);
-    setShowModal(false);
   }
+  setNewTaskTitle("");
+  setNewTaskDesc("");
+  setEditTask(false);
+  setShowModal(false);
 };
 
 
@@ -225,6 +211,43 @@ const handleKeyPress = (event: React.KeyboardEvent) => {
   }, [showModal]);
 
 
+  function handleSetPriority(itemId: string, area: string) {
+    let currentItems;
+  
+    if (area === 'To Do') {
+      currentItems = [...todoItems]; 
+    } else if (area === 'Doing') {
+      currentItems = [...doingItems];
+    } else if (area === 'Done') {
+      currentItems = [...doneItems];
+    }
+  
+    const updatedItems = currentItems.map(item => {
+      if (item.id === itemId) {
+        return {
+          ...item,
+          content: {
+            ...item.content,
+            priority: !item.content.priority 
+          }
+        };
+      }
+      return item;
+    });
+  
+    const sortedItems = updatedItems.sort((a, b) => {
+      return (b.content.priority ? 1 : 0) - (a.content.priority ? 1 : 0);
+    });
+
+    if (area === 'To Do') {
+      setTodoItems(sortedItems);
+    } else if (area === 'Doing') {
+      setDoingItems(sortedItems);
+    } else if (area === 'Done') {
+      setDoneItems(sortedItems);
+    }
+  }
+  window.handleSetPriority = handleSetPriority;
 
   //PARTE HTML DEL CODIGO
   return (

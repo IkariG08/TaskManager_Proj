@@ -31,14 +31,17 @@
   .Draggable-root {
     background-color: var(--background);
     position: relative;
-    padding: 16px;
+    // padding: 16px;
+    padding-top: 20px;
+    padding-left: 16px;
+    padding-bottom: 40px;
+    padding-right: 22px;
     border-radius: 8px;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
     cursor: grab;
     margin-bottom: 10px;
     transition: background-color 0.2s;
-  }
-  
+  }  
   .Draggable-root.dragging {
     background-color: var(--card-active) !important;
     color: white;
@@ -65,4 +68,30 @@
     position: absolute;
     bottom: 0.5rem;
     right: 0.5rem;
+  }
+  .icone{
+    color: var(--card-active);
+    cursor: pointer;
+    transition: 0.6s;
+  }
+  .priorita{
+    width: 40px;
+    height: 20px;
+    border-radius: 20px;
+    background-color: var(--button-hover);
+    position: absolute;
+    bottom: 0.7rem;
+    left: 0.7rem;
+    cursor: pointer;
+  }
+  .priorita-menor{
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    background-color: var(--card-active);
+    transition: 0.6s;
+    left: 0px;
+  }
+  .priorita-menor.active{
+    margin-left: 20px;
   }
