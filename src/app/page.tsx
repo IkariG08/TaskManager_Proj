@@ -141,10 +141,15 @@ window.removeItem = removeItem;
 //Función para editar la task seleccionada
 const editItem = (id: number, area: string) => {
   console.log(id);
+  //se agarra la lista correcta dependiendo de donde estén posicionadas las tasks 
+  //(en qué columna) 
   if (area==='To Do') {
     const itemToEdit = todoItems[id];
+    //se setean los strings del modal a los valores que tenía an teriormente
     setNewTaskTitle(itemToEdit.content.title);
     setNewTaskDesc(itemToEdit.content.description); 
+    //se cambia esta variable, para tener identificado exactamente cuál task es la q
+    //se va a editar
     setEditRules({ id: id, categ: 'todo' });
   }else if(area==='Doing'){
     const doingToEdit = doingItems[id];
@@ -170,10 +175,10 @@ const handleEditTask = (datos) => {
     // Evita agregar una tarea vacía
     return;
   }
+  //modifica la task correcta con el indice y la lista 
   if(datos.categ==='todo'){
     todoItems[datos.id].content.title= newTaskTitle;
     todoItems[datos.id].content.description= newTaskDesc;
-    
   }else if(datos.categ==='doing'){
     doingItems[datos.id].content.title= newTaskTitle;
     doingItems[datos.id].content.description= newTaskDesc;
@@ -181,6 +186,7 @@ const handleEditTask = (datos) => {
     doneItems[datos.id].content.title= newTaskTitle;
     doneItems[datos.id].content.description= newTaskDesc;
   }
+  //al final resetea los valores del modal para editar o agregar una nueva después
   setNewTaskTitle("");
   setNewTaskDesc("");
   setEditTask(false);
@@ -211,9 +217,11 @@ const handleKeyPress = (event: React.KeyboardEvent) => {
   }, [showModal]);
 
 
+  //función para setear nivel de importancia a las tasks
   function handleSetPriority(itemId: string, area: string) {
     let currentItems;
   
+      //se identifica en qué nivel están primero
     if (area === 'To Do') {
       currentItems = [...todoItems]; 
     } else if (area === 'Doing') {
@@ -222,6 +230,8 @@ const handleKeyPress = (event: React.KeyboardEvent) => {
       currentItems = [...doneItems];
     }
   
+    //agarrando la lista de las tasks, se agarra la task con el id correcto 
+    //y cambia el estado de su prioridad, es booleano
     const updatedItems = currentItems.map(item => {
       if (item.id === itemId) {
         return {
@@ -238,6 +248,8 @@ const handleKeyPress = (event: React.KeyboardEvent) => {
     const sortedItems = updatedItems.sort((a, b) => {
       return (b.content.priority ? 1 : 0) - (a.content.priority ? 1 : 0);
     });
+
+    //finalemnte setea la lista vieja con la nueva actualizada, ya con las prioridades correctas
 
     if (area === 'To Do') {
       setTodoItems(sortedItems);

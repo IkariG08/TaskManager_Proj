@@ -2,6 +2,16 @@ import { Box, Typography } from "@mui/material";
 import "./Card.scss";
 import React, { useState, useEffect } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
+
+
+/*
+  it simportant to run this command in the terminal 
+  so it can install some assests 
+
+      npm install @mui/icons-material @mui/material @emotion/react @emotion/styled
+
+
+*/
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -20,6 +30,15 @@ export default function Card(props: IDropsProps) {
     setItems(initialItems);
   }, [initialItems]);
 
+
+  /*
+  
+    las siguientes funciones están conectadas en page.tsx, su lógica está ahí,
+    aquí solo se ponen para mandar parámetros importantes a esas funciones
+    una es para el manejo de eliminación de tasks, otra para editarlas y la última 
+    para setear el nivel de importancia.
+  
+  */
   function handleDelete(id: string) {
     if (window.removeItem) {
       window.removeItem(id);
@@ -56,6 +75,7 @@ export default function Card(props: IDropsProps) {
             ref={provided.innerRef}
           >
             {items.map((item, index) => {
+              //para saber dependiendo de la fecha cuál task mostrar y cuál no 
               const isVisi = item.content.date === props.date;
 
               return (
